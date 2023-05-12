@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1>Add a song to {{ playlist.name }}</h1>
+
+<form method="POST" action="/songs/add">
+  {{ form.song.label }} {{ form.song }} 
+</form>
+
+
+{% endblock %}
