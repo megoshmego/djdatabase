@@ -5,13 +5,12 @@ db = SQLAlchemy()
 class Playlist(db.Model):
     """Playlist."""
 
-    __tablename__ = 'playlist'
+    __tablename__ = 'playlists'
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80), nullable=False)
 
-    # This is the "many" side of a many-to-many relationship with Song via the PlaylistSong association table.
-    songs = db.relationship('PlaylistSong', backref='playlist', cascade="all, delete")
+    songs = db.relationship('PlaylistSong', back_populates='playlist')
 
 
 class Song(db.Model):
@@ -23,23 +22,17 @@ class Song(db.Model):
     title = db.Column(db.String(80), nullable=False)
     artist = db.Column(db.String(80), nullable=False)
 
-    playlists = db.relationship('Playlist', secondary='playlist_song', backref='songs')
-
+    playlists = db.relationship('PlaylistSong', back_populates='song')
 
 
 class PlaylistSong(db.Model):
     """Mapping of a playlist to a song."""
 
-    __tablename__ = 'playlist_song'
+    __tablename__ = 'playlist_songs'
 
     id = db.Column(db.Integer, primary_key=True)
-    song_id = db.Column(db.Integer, db.ForeignKey('song.id'))
-    playlist_id = db.Column(db.Integer, db.ForeignKey('playlist.id'))
+    song_id = db.Column(db.Integer, db.ForeignKey('songs.id'))
+    playlist_id = db.Column(db.Integer, db.ForeignKey('playlists.id'))
 
-
-# DO NOT MODIFY THIS FUNCTION
-def connect_db(app):
-    """Connect to database."""
-
-    db.app = app
-    db.init_app(app)
+    song = db.relationship('Song', back_populates='playlists')
+    playlist = db.relationship('Playlist', back_populates='songs')

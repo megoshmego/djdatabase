@@ -5,7 +5,7 @@
 <h1>Add a form that when submitted creates a new playlist!</h1>
 <form method="POST" action="/playlists/add">
     {{ form.csrf_token }}
-    {{ form.playlist.label }} {{ form.playlist }} 
+    {{ form.playlist_name.label }} {{ form.playlist_name() }} 
     {{ form.submit() }}
 </form>
 {% endblock %}
