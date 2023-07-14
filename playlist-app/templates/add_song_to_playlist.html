@@ -4,8 +4,10 @@
 
 <h1>Add a song to {{ playlist.name }}</h1>
 
-<form method="POST" action="/songs/add">
-  {{ form.song.label }} {{ form.song }} 
+<form method="POST">
+  {{ form.csrf_token }}
+  {{ form.song.label }} {{ form.song }}
+  {{ form.submit() }}
 </form>
 
 

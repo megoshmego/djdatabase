@@ -9,7 +9,7 @@ from forms import NewSongForPlaylistForm, SongForm, PlaylistForm
 def create_app():
     app = Flask(__name__)
     app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:mego@localhost/djdatabase_db'
-    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False  # Optional: I usually turn off Flask-SQLAlchemy event system.
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False  
     app.config['SECRET_KEY'] = "I'LL NEVER TELL!!"
     db.init_app(app)
 
