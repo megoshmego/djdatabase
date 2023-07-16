@@ -120,19 +120,22 @@ def add_song_to_playlist(playlist_id):
     form = NewSongForPlaylistForm()
 
     # Restrict form to songs not already on this playlist
-    curr_on_playlist = [song.id for song in playlist.songs]  # Assuming 'songs' is a relationship in Playlist model
+    curr_on_playlist = [ps.song.id for ps in playlist.playlist_songs]
     eligible_songs = Song.query.filter(Song.id.notin_(curr_on_playlist)).all()  # Assuming Song model exists
     form.song.choices = [(s.id, s.title) for s in eligible_songs]  # Assuming 'title' is a field in Song model
 
     if form.validate_on_submit():
         # get song from form data
         song = Song.query.get_or_404(form.song.data)
-        # add song to playlist's songs
-        playlist.songs.append(song)
+        # create a new playlist-song association
+        playlist_song = PlaylistSong(song_id=song.id, playlist_id=playlist.id)
+        # add playlist-song to the session
+        db.session.add(playlist_song)
         # commit the changes
         db.session.commit()
 
         return redirect(f"/playlists/{playlist_id}")
+  
 
     return render_template("add_song_to_playlist.html",
                              playlist=playlist,
